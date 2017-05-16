@@ -25,11 +25,31 @@ func Benchmark_CreateStudent(b *testing.B) {
 		fmt.Println(err)
 		return
 	}
-	for i := 0; i < b.N; i++ {
+
+	m := make(map[int]string)
+	for i := 0; i < 10; i++ {
 		var student = CreateNewStudent(i).ToString()
-		_, err := c.Do("SET", strconv.Itoa(i), student)
+		m[i] = student
+	}
+	_, err = c.Do("SET", "student", m)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+func Benchmark_GetStudent(b *testing.B) {
+	c, err := redis.Dial("tcp", "127.0.0.1:6379")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for i := 0; i < b.N; i++ {
+		student, err := c.Do("GET", strconv.Itoa(i))
 		if err != nil {
 			fmt.Println(err)
 		}
+		str, _ := redis.String(student, nil)
+		fmt.Println(str)
 	}
 }

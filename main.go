@@ -9,7 +9,7 @@ import (
 )
 
 func handle(hw http.ResponseWriter, request *http.Request) {
-
+	hw.Write([]byte("123"))
 }
 
 func main() {

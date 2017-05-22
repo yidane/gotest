@@ -10,7 +10,6 @@ func concurrent1() {
 
 	<-done
 	<-done
-	<-done
 
 	fmt.Println("")
 }

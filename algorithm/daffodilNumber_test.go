@@ -1,7 +1,7 @@
-package algorithm
+package main
 
 import "testing"
 
 func Test_findDaffodilNumber(t *testing.T) {
-	findDaffodilNumber(153, 154)
+	FindDaffodilNumber(1, 100000000)
 }

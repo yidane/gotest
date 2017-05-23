@@ -1,5 +1,7 @@
 package main
 
 func main() {
-	FindDaffodilNumber(10, 100)
+	//FindDaffodilNumber(10, 100)
+
+	CountOneExec()
 }

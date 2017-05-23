@@ -4,6 +4,8 @@ import (
 	"fmt"
 )
 
+var max int = 10
+
 func main() {
 	fmt.Print("concurrent1:")
 	concurrent1()

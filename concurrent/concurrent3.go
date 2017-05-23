@@ -16,7 +16,7 @@ func concurrent3() {
 }
 
 func loop3(done chan bool) {
-	for i := 0; i < 10; i++ {
+	for i := 0; i < max; i++ {
 		fmt.Print(i)
 		runtime.Gosched() //让出CPU执行时间
 	}

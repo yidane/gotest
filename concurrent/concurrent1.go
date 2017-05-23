@@ -15,7 +15,7 @@ func concurrent1() {
 }
 
 func loop1(done chan bool) {
-	for i := 0; i < 10; i++ {
+	for i := 0; i < max; i++ {
 		fmt.Print(i)
 	}
 

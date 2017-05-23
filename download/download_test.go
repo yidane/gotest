@@ -42,12 +42,19 @@ func Test_Chanel(t *testing.T) {
 	cpuSum := runtime.NumCPU()
 	runtime.GOMAXPROCS(cpuSum)
 	for i := 0; i < cpuSum; i++ {
-		go ChanelDownlowd("http://www.kcaogen.top/blogInfo?blogId=9", i, chn)
+		//go ChanelDownlowd("http://www.kcaogen.top/blogInfo?blogId=11", i, chn)
 		//go ChanelDownlowd("http://localhost/TestWeb/api/tick", i, chn)
+		//go ChanelDownlowd("https://www.baidu.com/", i, chn)
+
+		go ChanelDownlowd("http://baike.baidu.com/api/wikiui/sharecounter?lemmaId=20350316&method=add&type=like", i, chn)
 	}
 
+	total := 0
 	for i := 0; i < cpuSum*10000; i++ {
-		fmt.Println(<-chn)
+		<-chn
+		total++
+		fmt.Println(total)
+		//fmt.Println(<-chn
 	}
 }
 

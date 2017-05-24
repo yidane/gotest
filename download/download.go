@@ -7,7 +7,7 @@ import (
 )
 
 func Download() (bool, error) {
-	resp, err := http.Get("http://localhost:8081/hello")
+	resp, err := http.Get("http://127.0.0.1:8022/")
 	if err != nil {
 		return false, err
 	}

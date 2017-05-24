@@ -1,9 +1,7 @@
 package download
 
 import (
-	"fmt"
 	"net/http"
-	"runtime"
 	"testing"
 )
 

@@ -54,7 +54,7 @@ func CountOne(num int) int {
 func CountOneExec() {
 	beginTime := time.Now()
 	fmt.Println("begin")
-	for i := 0; i < 20000000; i++ {
+	for i := 0; i < 200000; i++ {
 		if i == Fn(i) {
 			fmt.Println(i)
 		}

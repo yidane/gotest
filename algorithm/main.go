@@ -5,3 +5,7 @@ func main() {
 
 	CountOneExec()
 }
+
+
+//abcdefghijklmnopqrstuvwxyz
+//hijlmnu

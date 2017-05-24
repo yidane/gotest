@@ -58,6 +58,10 @@ func Test_Chanel(t *testing.T) {
 	}
 }
 
+func Test_GoServer(t *testing.T) {
+
+}
+
 func ChanelDownlowd(url string, id int, chn chan Result) {
 	for i := 0; i < 10000; i++ {
 		http.Get(url)

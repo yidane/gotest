@@ -26,14 +26,12 @@ func Benchmark_CreateStudent(b *testing.B) {
 		return
 	}
 
-	m := make(map[int]string)
-	for i := 0; i < 10; i++ {
+	for i := 0; i < b.N; i++ {
 		var student = CreateNewStudent(i).ToString()
-		m[i] = student
-	}
-	_, err = c.Do("SET", "student", m)
-	if err != nil {
-		fmt.Println(err)
+		_, err = c.Do("SET", strconv.Itoa(i), student)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 

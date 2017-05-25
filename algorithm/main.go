@@ -3,9 +3,10 @@ package main
 func main() {
 	//FindDaffodilNumber(10, 100)
 
-	CountOneExec()
-}
+	//CountOneExec()
 
+	output(100)
+}
 
 //abcdefghijklmnopqrstuvwxyz
 //hijlmnu

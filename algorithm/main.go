@@ -5,7 +5,7 @@ func main() {
 
 	//CountOneExec()
 
-	output(100)
+	output()
 }
 
 //abcdefghijklmnopqrstuvwxyz

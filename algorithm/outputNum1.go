@@ -33,11 +33,11 @@ func output1() {
 	buf4 := new(bytes.Buffer)
 	go writeFile(chs4, buf4)
 
-	time.Sleep(1 * time.Second)
-	printData("file1: ", buf1)
-	printData("file2: ", buf2)
-	printData("file3: ", buf3)
-	printData("file4: ", buf4)
+	time.Sleep(time.Second)
+	printData("A: ", buf1)
+	printData("B: ", buf2)
+	printData("C: ", buf3)
+	printData("D: ", buf4)
 }
 
 func makeChs(len int) (rets []chan int) {

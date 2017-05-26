@@ -27,3 +27,7 @@ func Test_sum3(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func Test_sum4(t *testing.T) {
+	sum4(20)
+}

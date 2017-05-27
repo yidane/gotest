@@ -26,6 +26,16 @@ func Test_sum3(t *testing.T) {
 	if sum3(2016, 3, 9) != 69 {
 		t.Fail()
 	}
+
+	defer func() {
+		if err := recover(); err != nil {
+			t.Log(err)
+		}
+	}()
+
+	if sum3(2016, 2, 30) != 69 {
+		t.Fail()
+	}
 }
 
 func Test_sum4(t *testing.T) {

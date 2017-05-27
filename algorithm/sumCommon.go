@@ -38,12 +38,28 @@ func sum2() {
 
 //输入某年某月某日，判断这一天是这一年的第几天？
 func sum3(year, month, day int) (result int) {
+	if month < 1 || month > 12 {
+		panic("month must more than 0 and less than 13!")
+	}
+
+	if day < 1 || day > 31 {
+		panic("day must more than 0 and less than 32!")
+	}
+
 	if month == 1 {
+		if day < 1 || day > 31 {
+			panic("January has 31 days,you cannot input a number more than 31 or less than 1!")
+		}
 		return day
 	}
 	monthDay := [12]int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 	if (year%4 == 0 && year%100 != 0) || year%400 == 0 {
 		monthDay[1] = 29
+	}
+	if month == 2 {
+		if day > monthDay[1] {
+			panic(fmt.Sprintf("Febrary of year %d has %d days,you cannot input a number more %d as day number!", year, monthDay[1], monthDay[1]))
+		}
 	}
 	for i := 1; i < month; i++ {
 		result += monthDay[i-1]

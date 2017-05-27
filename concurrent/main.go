@@ -10,5 +10,7 @@ func main() {
 	// fmt.Print("concurrent3:")
 	// concurrent3()
 
-	Output(10)
+	//Output(10)
+
+	producerAndConsumer()
 }

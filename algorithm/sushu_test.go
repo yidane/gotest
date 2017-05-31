@@ -3,9 +3,9 @@ package main
 import "testing"
 
 func Test_sieve(t *testing.T) {
-	sieve()
+	sieve(120)
 }
 
 func Test_sushu(t *testing.T) {
-	sushu(120)
+	sushu(1200000)
 }

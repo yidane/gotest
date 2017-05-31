@@ -10,7 +10,7 @@ func sushu(num int) {
 	}
 
 	m := arr[0]
-	for m < num {
+	for m < num/2 {
 		fmt.Println(m)
 		for _, v := range arr {
 			if v%m != 0 {
@@ -37,8 +37,8 @@ http://tonybai.com/2017/04/20/go-coding-in-go-way/
   算法描述：先用最小的素数2去筛，把2的倍数剔除掉；下一个未筛除的数就是素数(这里是3)。再用这个素数3去筛，筛除掉3的倍数... 这样不断重复下去，直到筛完为止。
 */
 
-func generate(ch chan<- int) {
-	for i := 2; ; i++ {
+func generate(num int, ch chan<- int) {
+	for i := 2; i < num; i++ {
 		ch <- i // Send 'i' to channel 'ch'.
 	}
 }
@@ -51,10 +51,10 @@ func filter(src <-chan int, dst chan<- int, prime int) {
 	}
 }
 
-func sieve() {
+func sieve(num int) {
 	ch := make(chan int) // Create a new channel.
-	go generate(ch)      // Start generate() as a subprocess.
-	for {
+	go generate(num, ch) // Start generate() as a subprocess.
+	for i := 2; i < num; i++ {
 		prime := <-ch
 		fmt.Print(prime, "\n")
 		ch1 := make(chan int)

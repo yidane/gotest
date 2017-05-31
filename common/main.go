@@ -1,6 +1,14 @@
 package main
 
+import (
+	"fmt"
+)
+
 func main() {
 	//testArgument()
-	sort()
+
+	//sort()
+
+	s := GetString()
+	fmt.Println(CheckString(s))
 }

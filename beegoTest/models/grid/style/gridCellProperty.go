@@ -8,6 +8,7 @@ type GridCellProperty struct {
 	IsGroup          bool
 	SubTotalType     AggregateType
 	TotalType        AggregateType
+	HyperLink        string
 }
 
 //OrderByDirection 定义排序规则

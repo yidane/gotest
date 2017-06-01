@@ -18,5 +18,6 @@ type GridCell struct {
 	Bold          bool
 	Background    string
 	ColumnName    string
+	Link          string
 	CellProperty  GridCellProperty
 }

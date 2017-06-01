@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"database/sql"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -10,15 +8,6 @@ import (
 	"github.com/yidane/gotest/beegoTest/models/grid/data"
 	"github.com/yidane/gotest/beegoTest/models/grid/style"
 )
-
-//SaleReport 销售报表
-type SaleReport struct {
-	NumericalOrder float64
-	DataDate       time.Time
-	PaymentStatus  bool
-	PaymentAmount  float64
-	Consignee      string
-}
 
 //GetDefine 获取报表数据
 func GetDefine() (data.Define, style.Grid) {
@@ -43,11 +32,11 @@ func GetDefine() (data.Define, style.Grid) {
 	define.ColumnCollection = []string{"NumericalOrder", "DataDate", "PaymentStatus", "PaymentAmount", "Consignee"}
 	rows := []data.DefineRow{}
 	for rs.Next() {
-		var NumericalOrder string
-		var DataDate string
-		var PaymentStatus interface{}
-		var PaymentAmount interface{}
-		var Consignee interface{}
+		var NumericalOrder *int64
+		var DataDate *string
+		var PaymentStatus *string
+		var PaymentAmount *string
+		var Consignee *string
 		err = rs.Scan(&NumericalOrder, &DataDate, &PaymentStatus, &PaymentAmount, &Consignee)
 		if err != nil {
 			panic(err)
@@ -57,9 +46,47 @@ func GetDefine() (data.Define, style.Grid) {
 	define.RowCollection = rows
 
 	//生成Grid
-	g := style.Grid{RowCollection: []style.GridRow{style.CreateHeader("NumericalOrder", "DataDate", "PaymentStatus", "PaymentAmount", "Consignee"),
-		style.CreateBoundRow("NumericalOrder", "DataDate", "PaymentStatus", "PaymentAmount", "Consignee")}}
+	g := style.Grid{
+		RowCollection: []style.GridRow{style.CreateHeader("DataDate", "NumericalOrder", "PaymentStatus", "PaymentAmount", "Consignee")},
+	}
+	dataDateCell := style.GridCell{
+		Value:         "[" + "DataDate" + "]",
+		TextAlign:     "center",
+		VerticalAlign: "center",
+		Link:          "http://www.baidu.com",
+		CellProperty: style.GridCellProperty{
+			IsGroup: true,
+		},
+	}
+	numericalOrderCell := style.GridCell{
+		Value:        "[" + "NumericalOrder" + "]",
+		CellProperty: style.GridCellProperty{},
+	}
+	paymentStatusCell := style.GridCell{
+		Value:        "[" + "PaymentStatus" + "]",
+		CellProperty: style.GridCellProperty{},
+	}
+	paymentAmountCell := style.GridCell{
+		Value:        "[" + "PaymentAmount" + "]",
+		CellProperty: style.GridCellProperty{},
+	}
+	consigneeCell := style.GridCell{
+		Value:        "[" + "Consignee" + "]",
+		CellProperty: style.GridCellProperty{},
+	}
+	g.RowCollection = append(g.RowCollection, style.GridRow{
+		IsBindingRow: true,
+		Height:       30,
+		CellCollection: []style.GridCell{
+			dataDateCell,
+			numericalOrderCell,
+			paymentStatusCell,
+			paymentAmountCell,
+			consigneeCell,
+		},
+	})
 	g.FrozenRows = 1
+	g.ColumnWidthCollection = []float64{0.2, 0.15, 0.15, 0.15, 0.15}
 
 	return define, g
 }

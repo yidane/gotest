@@ -10,4 +10,5 @@ type Grid struct {
 	TotalColor            string
 	ColumnWidthCollection []float64
 	RowCollection         []GridRow
+	MergedCells           []MergeInfo
 }

@@ -41,13 +41,28 @@ func GetDefine() (data.Define, style.Grid) {
 		if err != nil {
 			panic(err)
 		}
-		rows = append(rows, data.DefineRow{CellCollection: []interface{}{NumericalOrder, DataDate, PaymentStatus, PaymentAmount, Consignee}})
+		rows = append(rows, data.DefineRow{CellCollection: []interface{}{NumericalOrder, DataDate, 123456789, PaymentAmount, Consignee}})
 	}
 	define.RowCollection = rows
 
+	//查询数据行为空
+	//define.RowCollection = nil
+
 	//生成Grid
 	g := style.Grid{
-		RowCollection: []style.GridRow{style.CreateHeader("DataDate", "NumericalOrder", "PaymentStatus", "PaymentAmount", "Consignee")},
+		RowCollection: []style.GridRow{
+			style.CreateHeader("DataDate", "NumericalOrder", "表头", "表头", "Consignee"),
+			style.CreateHeader("DataDate", "NumericalOrder", "PaymentStatus", "PaymentAmount", "Consignee"),
+		},
+	}
+	// g.SubTotalColor = "#f8f6f2"
+	// g.TotalColor = "#f8f6f2"
+	//合并表头
+	g.MergedCells = []style.MergeInfo{
+		style.NewMergeInfo(0, 0, 1, 0),
+		style.NewMergeInfo(0, 1, 1, 1),
+		style.NewMergeInfo(0, 2, 0, 3),
+		style.NewMergeInfo(0, 4, 1, 4),
 	}
 	dataDateCell := style.GridCell{
 		Value:         "[" + "DataDate" + "]",
@@ -64,6 +79,7 @@ func GetDefine() (data.Define, style.Grid) {
 	}
 	paymentStatusCell := style.GridCell{
 		Value:        "[" + "PaymentStatus" + "]",
+		Format:       "#,0.00",
 		CellProperty: style.GridCellProperty{},
 	}
 	paymentAmountCell := style.GridCell{
@@ -85,7 +101,7 @@ func GetDefine() (data.Define, style.Grid) {
 			consigneeCell,
 		},
 	})
-	g.FrozenRows = 1
+	g.FrozenRows = 2
 	g.ColumnWidthCollection = []float64{0.2, 0.15, 0.15, 0.15, 0.15}
 
 	return define, g

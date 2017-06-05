@@ -30,6 +30,8 @@ func Index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 //Hello Say hello to client
 func Hello(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	fmt.Fprintf(w, "hello %s!\n", ps.ByName("name"))
+	time.Sleep(time.Second)
+	fmt.Fprintf(w, "Hala %s!\n", ps.ByName("Madrid"))
 }
 
 func (nf NotFoundInfo) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -106,6 +108,7 @@ func dialRedis() bool {
 	}
 
 	var err error
+
 	c, err = redis.Dial("tcp", "127.0.0.1:6379")
 	if err != nil {
 		panic(err)

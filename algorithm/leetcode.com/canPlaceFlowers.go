@@ -21,19 +21,74 @@ The input array size is in the range of [1, 20000].
 n is a non-negative integer which won't exceed the input array size.
 */
 //*************************************************************************
-func canPlaceFlowers(flowerbed []int, n int) bool {
-	if len(flowerbed) < n {
+func canPlaceFlowers0(flowerbed []int, n int) bool {
+	if n == 0 {
+		return true
+	}
+	l := len(flowerbed)
+	if l < n || l == 0 {
 		return false
 	}
-
-	for i := 0; i < len(flowerbed); i++ {
-		if i == 0 {
-
+	if l == 1 {
+		if flowerbed[0] == 1 {
+			return false
 		}
-		if flowerbed[i] == 0 {
+		return n <= 1
+	}
+	if l == 2 {
+		if flowerbed[0] == 1 || flowerbed[1] == 1 {
+			return false
+		}
+		return n <= 1
+	}
 
+	blankArr := []int{}
+	blank := 0
+	if flowerbed[0] == 0 {
+		blank = 2
+	}
+
+	for i := 1; i < l-1; i++ {
+		if flowerbed[i] == 0 {
+			blank++
+		} else {
+			if blank >= 3 {
+				blankArr = append(blankArr, blank)
+			}
+			blank = 0
 		}
 	}
 
-	return true
+	if flowerbed[l-1] == 0 && blank >= 1 {
+		blank += 2
+	}
+	if blank >= 3 {
+		blankArr = append(blankArr, blank)
+	}
+
+	total := 0
+	for _, v := range blankArr {
+		total += (v - 1) / 2
+	}
+
+	return total >= n
+}
+
+func canPlaceFlowers(flowerbed []int, n int) bool {
+	l := len(flowerbed)
+	for i := 0; i < l && n > 0; i++ {
+		if flowerbed[i] == 1 {
+			continue
+		}
+		if i > 0 && flowerbed[i-1] == 1 {
+			continue
+		}
+		if i < l-1 && flowerbed[i+1] == 1 {
+			continue
+		}
+		n--
+		flowerbed[i] = 1
+	}
+
+	return n == 0
 }

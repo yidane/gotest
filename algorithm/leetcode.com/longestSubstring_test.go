@@ -7,7 +7,7 @@ import (
 )
 
 func Test_lengthOfLongestSubstring(t *testing.T) {
-	Convey("", t, func() {
+	Convey("测试最长非重复子字符串", t, func() {
 		So(lengthOfLongestSubstring("abcabcabc"), ShouldEqual, 3)
 		So(lengthOfLongestSubstring("bbbbb"), ShouldEqual, 1)
 		So(lengthOfLongestSubstring("pwwkew"), ShouldEqual, 3)

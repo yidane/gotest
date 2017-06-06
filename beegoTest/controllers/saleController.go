@@ -23,3 +23,8 @@ func (c SaleController) Get() {
 	c.Data["json"] = r.Success(d, s)
 	c.ServeJSON()
 }
+
+func (c SaleController) GetDefine() {
+	c.Data["json"] = models.GetTestDefine()
+	c.ServeJSON()
+}

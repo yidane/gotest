@@ -5,7 +5,9 @@ func main() {
 
 	//CountOneExec()
 
-	output()
+	//output()
+
+	sieve(120)
 }
 
 //abcdefghijklmnopqrstuvwxyz

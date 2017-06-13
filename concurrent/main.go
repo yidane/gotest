@@ -12,5 +12,8 @@ func main() {
 
 	//Output(10)
 
-	producerAndConsumer()
+	//producerAndConsumer()
+
+	func1()
+	func2()
 }

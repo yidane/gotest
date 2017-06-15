@@ -7,5 +7,7 @@ import (
 )
 
 func Test_findDaffodilNumber(t *testing.T) {
-	FindDaffodilNumber(1, 100000000)
+	Convey("寻找水仙数", t, func() {
+		FindDaffodilNumber(1, 100000000)
+	})
 }

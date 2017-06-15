@@ -36,7 +36,7 @@ func twoSum0(nums []int, target int) []int {
 	return nil
 }
 
-//2n
+//n
 func twoSum(nums []int, target int) []int {
 	if nums == nil || len(nums) <= 1 {
 		return nil
@@ -45,7 +45,7 @@ func twoSum(nums []int, target int) []int {
 	arr := make(map[int][]int, len(nums))
 	for i := 0; i < len(nums); i++ {
 		if ii, ok := arr[nums[i]]; ok {
-			ii = append(ii, i)
+			arr[nums[i]] = append(ii, i)
 		} else {
 			arr[nums[i]] = []int{i}
 		}
@@ -54,7 +54,8 @@ func twoSum(nums []int, target int) []int {
 	for v, ii := range arr {
 		nv := target - v
 		if v == nv {
-			l := len(ii)
+			//为什么我这次测试到len一直不正确呢。。。
+			l := len(arr[v])
 			if l >= 2 {
 				return []int{ii[0], ii[1]}
 			}

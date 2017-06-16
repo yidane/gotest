@@ -124,30 +124,30 @@ func selectSort1(arr []int) []int {
 
 //快速排序算法
 func quickSort(arr []int, l, r int) []int {
-	quickSort := func(arr []int, begin, end int) int {
+	quickSort := func(arr *[]int, begin, end int) int {
 		i, j := begin, end
-		x := arr[begin]
+		x := (*arr)[begin]
 		for i < j {
-			for i < j && arr[j] >= x {
+			for i < j && (*arr)[j] >= x {
 				j--
 			}
 			if i < j {
-				arr[i] = arr[j]
+				(*arr)[i] = (*arr)[j]
 				i++
 			}
-			for i < j && arr[i] <= x {
+			for i < j && (*arr)[i] <= x {
 				i++
 			}
 			if i < j {
-				arr[j] = arr[i]
+				(*arr)[j] = (*arr)[i]
 				j--
 			}
 		}
-		arr[i] = x
+		(*arr)[i] = x
 		return i
 	}
 	begin, end := 0, len(arr)
-	i := quickSort(arr, begin, end)
+	quickSort(&arr, begin, end)
 
 	return arr
 }

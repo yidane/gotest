@@ -72,3 +72,29 @@ func Test_Question(t *testing.T) {
 		})
 	}
 }
+
+//计算一个int型在转换为二进制后出现的1的次数
+func Test_CountOne(t *testing.T) {
+	var countOne = func(i int) int {
+		if i < 0 {
+			i = -i
+		}
+		count := 0
+		for i > 0 {
+			if i&1 == 1 {
+				count++
+			}
+			i = i >> 1
+		}
+
+		return count
+	}
+
+	fmt.Println("1:", countOne(1))
+	fmt.Println("10:", countOne(10))
+	fmt.Println("121:", countOne(121))
+	fmt.Println("-1231:", countOne(-1231))
+	fmt.Println("111:", countOne(111))
+	fmt.Println("2:", countOne(2))
+	fmt.Println("0:", countOne(0))
+}

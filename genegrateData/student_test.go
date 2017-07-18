@@ -1,9 +1,11 @@
-package genegrateData
+package main
 
 import (
 	"fmt"
 	"strconv"
 	"testing"
+
+	"net/http"
 
 	"github.com/garyburd/redigo/redis"
 )
@@ -49,5 +51,11 @@ func Benchmark_GetStudent(b *testing.B) {
 		}
 		str, _ := redis.String(student, nil)
 		fmt.Println(str)
+	}
+}
+
+func Benchmark_Get(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		http.Get("http://localhost:8888/?id=3")
 	}
 }

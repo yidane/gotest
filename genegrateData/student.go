@@ -1,4 +1,4 @@
-package genegrateData
+package main
 
 import (
 	"encoding/json"
@@ -58,5 +58,5 @@ func (student Student) ToString() string {
 }
 
 func creatScore(no int, rand *rand.Rand) int {
-	return rand.Intn(100)
+	return 44 + 56*rand.Intn(100)/100
 }

@@ -1,4 +1,4 @@
-package genegrateData
+package main
 
 import "github.com/garyburd/redigo/redis"
 import "fmt"
@@ -19,4 +19,14 @@ func Genegrate(total int) {
 			fmt.Println(err)
 		}
 	}
+}
+
+//GenegrateStudentList 生产数据
+func GenegrateStudentList(total int) []*Student {
+	students := make([]*Student, total)
+	for i := 0; i < total; i++ {
+		students[i] = CreateNewStudent(i)
+	}
+
+	return students
 }

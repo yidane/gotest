@@ -32,6 +32,7 @@ func main() {
 		ch <- 1
 
 		no := r.URL.Query()["id"]
+
 		if len(no) == 0 {
 			w.Write([]byte("不存在参数id"))
 			return

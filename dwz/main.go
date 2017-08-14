@@ -1,34 +1,87 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
 	"errors"
+	"fmt"
+	"log"
+	"net/http"
+	"runtime"
+	"time"
+
+	"github.com/garyburd/redigo/redis"
+)
+
+//LocationInfo store 302 info
+type LocationInfo struct {
+	Key      string
+	Location string
+}
+
+var (
+	codeChan         = make(chan string, 1000)
+	locationInfoChan = make(chan LocationInfo, 100)
 )
 
 func main() {
 
-	for i := 100000000; i < 100000001; i++ {
-		url := "http://dwz.cn/" + Generate(i)
-		location, err := GetRedirectUrl(url)
-		if err != nil {
-			fmt.Println(url)
-			fmt.Println(err)
-		}
-
-		fmt.Println(location)
+	con, err := redis.Dial("tcp", "127.0.0.1:6379")
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
-	//url := "http://dwz.cn/5CFTHF"
-	//location, err := GetRedirectUrl(url)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
+	defer con.Close()
+	log.Println("connect redis success")
 
-	//fmt.Println(location)
+	cpuNum := runtime.NumCPU()
+	runtime.GOMAXPROCS(cpuNum)
+
+	go func() {
+		log.Println("begin generate code")
+		for i := 0; i < 100000001; i++ {
+			newCode := generate(i)
+			codeChan <- newCode
+		}
+	}()
+
+	getRedirect := func(i int) {
+		log.Println("goruntine ", i, " start")
+		for {
+			select {
+			case code := <-codeChan:
+				url := "http://dwz.cn/" + code
+				location, err := getRedirectURL(url)
+				if err != nil {
+					fmt.Println(url)
+					fmt.Println(err)
+				}
+
+				locationInfoChan <- LocationInfo{Location: location, Key: code}
+				break
+			default:
+				break
+			}
+		}
+	}
+
+	for i := 0; i < cpuNum; i++ {
+		go getRedirect(i)
+	}
+
+	log.Println("start goruntine save to redis")
+	time.Sleep(time.Second)
+	for {
+		select {
+		case locationInfo := <-locationInfoChan:
+			con.Do("SET", locationInfo.Key, locationInfo.Location)
+			break
+		default:
+			break
+		}
+	}
 }
 
-func GetRedirectUrl(url string) (string, error) {
+func getRedirectURL(url string) (string, error) {
 	var client = http.Client{
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
 			return http.ErrUseLastResponse
@@ -52,32 +105,30 @@ func GetRedirectUrl(url string) (string, error) {
 	return "", errors.New("The Response StatusCode is not 302")
 }
 
-func Generate(num int) (tiny string) {
+func generate(num int) (tiny string) {
 	fmt.Println(num)
 	alpha := merge(getRange(48, 57), getRange(65, 90))
 	alpha = merge(alpha, getRange(97, 122))
 	if num < 62 {
 		tiny = string(alpha[num])
 		return tiny
-	} else {
-		var runes []rune
-		runes = append(runes, alpha[num%62])
-		num = num / 62
-		for num >= 1 {
-			if num < 62 {
-				runes = append(runes, alpha[num-1])
-			} else {
-				runes = append(runes, alpha[num%62])
-			}
-			num = num / 62
-
-		}
-		for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-			runes[i], runes[j] = runes[j], runes[i]
-		}
-		tiny = string(runes)
-		return tiny
 	}
+	var runes []rune
+	runes = append(runes, alpha[num%62])
+	num = num / 62
+	for num >= 1 {
+		if num < 62 {
+			runes = append(runes, alpha[num-1])
+		} else {
+			runes = append(runes, alpha[num%62])
+		}
+		num = num / 62
+
+	}
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	tiny = string(runes)
 	return tiny
 }
 

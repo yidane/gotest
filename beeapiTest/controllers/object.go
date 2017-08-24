@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"github.com/yidane/gotest/beeapiTest/models"
 	"encoding/json"
+	"github.com/yidane/gotest/beeapiTest/models"
 
 	"github.com/astaxie/beego"
 )
@@ -89,4 +89,3 @@ func (o *ObjectController) Delete() {
 	o.Data["json"] = "delete success!"
 	o.ServeJSON()
 }
-

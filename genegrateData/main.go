@@ -23,7 +23,7 @@ func init() {
 }
 
 func main() {
-	runtime.GOMAXPROCS(runtime.NumCPU())
+	runtime.GOMAXPROCS(runtime.NumCPU()*5)
 
 	ch = make(chan int)
 

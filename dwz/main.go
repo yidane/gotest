@@ -33,7 +33,7 @@ func main() {
 	defer con.Close()
 	log.Println("connect redis success")
 
-	cpuNum := runtime.NumCPU()
+	cpuNum := runtime.NumCPU() * 5
 	runtime.GOMAXPROCS(cpuNum)
 
 	go func() {

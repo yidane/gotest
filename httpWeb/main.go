@@ -90,7 +90,7 @@ func main() {
 	//router.NotFound = http.FileServer(http.Dir("public"))
 	router.NotFound = new(NotFoundInfo)
 
-	log.Fatal(http.ListenAndServe(":8888", router))
+	log.Fatal(http.ListenAndServe(":8889", router))
 }
 
 func init() {

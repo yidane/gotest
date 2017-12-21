@@ -29,7 +29,7 @@ func main() {
 	rpc.Register(&RedisServer{})
 	rpc.HandleHTTP()
 
-	l, err := net.Listen("tcp", ":1234")
+	l, err := net.Listen("tcp", ":8989")
 	if err != nil {
 		log.Println(err)
 		return

@@ -7,6 +7,7 @@ import (
 	"runtime"
 	"strconv"
 	"testing"
+	"time"
 )
 
 func Benchmark_HttpWeb(b *testing.B) {
@@ -14,11 +15,14 @@ func Benchmark_HttpWeb(b *testing.B) {
 	runtime.GOMAXPROCS(numCPU)
 
 	chn := make(chan int)
-	for i := 0; i < b.N; i++ {
+	t := 100000
+	n := time.Now()
+	for i := 0; i < t; i++ {
 		go func(i int) {
 			res, err := http.Get("http://localhost:8888/Get/" + strconv.Itoa(i))
 			if err != nil {
-				fmt.Println(err)
+				chn <- i
+				return
 			}
 
 			defer res.Body.Close()
@@ -31,7 +35,8 @@ func Benchmark_HttpWeb(b *testing.B) {
 		}(i)
 	}
 
-	for i := 0; i < b.N; i++ {
+	for i := 0; i < t; i++ {
 		<-chn
 	}
+	fmt.Println(time.Now().Sub(n))
 }

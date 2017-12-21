@@ -9,6 +9,12 @@ import (
 	"time"
 
 	"github.com/garyburd/redigo/redis"
+	//"fmt"
+	//"log"
+	//"runtime"
+	//"time"
+	//
+	//"github.com/garyburd/redigo/redis"
 )
 
 //LocationInfo store 302 info
@@ -23,7 +29,6 @@ var (
 )
 
 func main() {
-
 	con, err := redis.Dial("tcp", "127.0.0.1:6379")
 	if err != nil {
 		fmt.Println(err)

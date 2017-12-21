@@ -54,6 +54,7 @@ func main() {
 				if err != nil {
 					fmt.Println(url)
 					fmt.Println(err)
+					break
 				}
 
 				locationInfoChan <- LocationInfo{Location: location, Key: code}
@@ -73,7 +74,8 @@ func main() {
 	for {
 		select {
 		case locationInfo := <-locationInfoChan:
-			con.Do("SET", locationInfo.Key, locationInfo.Location)
+			//con.Do("SET", locationInfo.Key, locationInfo.Location)
+			con.Do("HMSET", "dwz.cn", locationInfo.Key, locationInfo.Location)
 			break
 		default:
 			break
@@ -97,11 +99,12 @@ func getRedirectURL(url string) (string, error) {
 	}
 	defer res.Body.Close()
 	if res.StatusCode == 302 {
-		if location, ok := res.Header["Location"]; ok {
+		if location, ok := res.Header["Location"]; ok && len(location) > 0 {
 			return location[0], nil
 		}
 	}
 
+	log.Println(res.StatusCode)
 	return "", errors.New("The Response StatusCode is not 302")
 }
 

@@ -9,7 +9,7 @@ func main() {
 
 	//sieve(120)
 
-	largestNumber1()
+	largestNumber()
 }
 
 //abcdefghijklmnopqrstuvwxyz

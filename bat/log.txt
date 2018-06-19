@@ -1,0 +1,31 @@
+[2018/06/19 15:56:02 CST] [INFO] (main.main:35) current os dot not be supported
+[2018/06/19 15:56:06 CST] [INFO] (main.main:35) current os dot not be supported
+[2018/06/19 15:57:12 CST] [INFO] (main.main:37) current os dot not be supported /r/n
+[2018/06/19 15:57:30 CST] [INFO] (main.main:37) current os dot not be supported 
+
+[2018/06/19 15:57:39 CST] [INFO] (main.main:37) current os dot not be supported 
+
+[2018/06/19 15:57:45 CST] [INFO] (main.main:37) current os dot not be supported 
+
+[2018/06/19 16:02:15 CST] [EROR] (main.main:36) yidane error 
+
+[2018/06/19 16:02:15 CST] [INFO] (main.main:41) current os dot not be supported 
+
+[2018/06/19 16:03:08 CST] [EROR] (main.main:36) yidane error 
+
+[2018/06/19 16:03:08 CST] [EROR] (w32tm) yidane error 
+
+[2018/06/19 16:03:08 CST] [INFO] (main.main:42) current os dot not be supported 
+
+[2018/06/19 16:07:13 CST] [EROR] (main.main:36) yidane error 
+
+[2018/06/19 16:07:13 CST] [EROR] (w32tm) yidane error 
+
+[2018/06/19 16:07:13 CST] [INFO] (main.main:42) current os dot not be supported 
+
+[2018/06/19 16:07:23 CST] [EROR] (main.main:36) yidane error 
+
+[2018/06/19 16:07:23 CST] [EROR] (w32tm) yidane error 
+
+[2018/06/19 16:07:23 CST] [EROR] (main.main:49) exec: "cmd": executable file not found in $PATH 
+

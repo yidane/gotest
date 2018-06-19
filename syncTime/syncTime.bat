@@ -1,0 +1,1 @@
+syncTime.exe -logpath="log/log.txt"

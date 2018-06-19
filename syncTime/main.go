@@ -1,84 +1,56 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"log"
-	"net"
-	"os"
+	"os/exec"
+	"runtime"
+	"strings"
+	"time"
+
+	"github.com/yidane/log4go"
 )
 
-var syncURI = []string{
-	"5time.nist.gov",
-	"time-nw.nist.gov",
-	"time-a.nist.gov",
-	"time-b.nist.gov",
-	"tick.mit.edu",
-	"time.windows.com",
-	"clock.sgi.com",
-	"13.65.245.138",
-}
+var logger log4go.Logger
 
 func main() {
-	var listen net.Listener
-	var err error
-	for _, url := range syncURI {
-		remoteIPs := getRemoteIP(url)
-		if remoteIPs != nil {
-			for _, ip := range remoteIPs {
-				listen, err = net.Listen("tcp", ip+":13")
-				if err != nil {
-					fmt.Println(err)
-					continue
-				}
-				break
-			}
+	logPath := flag.String("logpath", "", "you do not input log file path")
+
+	flag.Parse()
+
+	if *logPath == "" {
+		flag.PrintDefaults()
+		fmt.Println("log will be outputed by console")
+		logger = log4go.NewDefaultLogger(log4go.FINE)
+	} else {
+		filePath := strings.ToLower(strings.TrimSpace(*logPath))
+		logger = make(log4go.Logger)
+		logWriter := log4go.NewFileLogWriter(filePath, false)
+		if runtime.GOOS != "windows" {
+			logWriter.SetFormat("[%D %T] [%L] (%S) %M \r\n")
 		}
-	}
-	if listen == nil {
-		log.Println("none tcp begin listen")
-		os.Exit(1)
+		logger.AddFilter("file", log4go.FINE, logWriter)
+		defer logger.Close()
 	}
 
-	defer listen.Close()
-	log.Println("tcp begin listen")
+	defer time.Sleep(time.Second * 1)
 
-	for {
-		con, err := listen.Accept()
-		if err != nil {
-			continue
-		}
-
-		log.Println(con.RemoteAddr().String(), " tcp connect succeed")
+	if runtime.GOOS != "windows" {
+		logger.Info("current os dot not be supported")
+		return
 	}
+
+	execCommand("net start w32time")
+	execCommand("w32tm /resync")
 }
 
-func getIP() {
-	addrs, err := net.InterfaceAddrs()
+func execCommand(c string) {
+	startService := exec.Command("cmd", "/c", c)
+	msg, err := startService.CombinedOutput()
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		logger.Error(err)
+	} else {
+		logger.Log(log4go.INFO, "w32tm", "succeed")
 	}
-	for _, address := range addrs {
-		// 检查ip地址判断是否回环地址
-		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
-			if ipnet.IP.To4() != nil {
-				fmt.Println(ipnet.IP.String())
-			}
-		}
-	}
-}
-
-func getRemoteIP(url string) []string {
-	ns, err := net.LookupHost(url)
-	if err != nil {
-		//fmt.Fprintf(os.Stderr, "Err: %s", err.Error())
-		return nil
-	}
-
-	// fmt.Fprintf(os.Stdout, "----%s\n", url)
-	// for _, n := range ns {
-	// 	fmt.Fprintf(os.Stdout, "----%s\n", n)
-	// }
-
-	return ns
+	logger.Log(log4go.INFO, "w32tm", string(msg))
 }

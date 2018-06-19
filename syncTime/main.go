@@ -47,6 +47,13 @@ func main() {
 func execCommand(c string) {
 	startService := exec.Command("cmd", "/c", c)
 	msg, err := startService.CombinedOutput()
+
+	if ee, ok := err.(*exec.ExitError); ok {
+		fmt.Println(ee.Success())
+	} else {
+
+	}
+
 	if err != nil {
 		logger.Error(err)
 	} else {

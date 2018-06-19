@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"os/exec"
@@ -12,12 +11,13 @@ import (
 	"github.com/yidane/log4go"
 )
 
+var logger log4go.Logger
+
 func main() {
 	logPath := flag.String("logpath", "", "you do not input log file path")
 
 	flag.Parse()
 
-	var logger log4go.Logger
 	if *logPath == "" {
 		flag.PrintDefaults()
 		fmt.Println("log will be outputed by console")
@@ -33,26 +33,24 @@ func main() {
 		defer logger.Close()
 	}
 
-	logger.Error(errors.New("yidane error"))
-	logger.Log(log4go.ERROR, "w32tm", "yidane error")
-
-	defer time.Sleep(time.Second * 3)
+	defer time.Sleep(time.Second * 1)
 
 	if runtime.GOOS != "windows" {
 		logger.Info("current os dot not be supported")
 		return
 	}
 
-	c := exec.Command("cmd", "/c", "w32tm /resync")
-	err := c.Run()
+	execCommand("net start w32time")
+	execCommand("w32tm /resync")
+}
+
+func execCommand(c string) {
+	startService := exec.Command("cmd", "/c", c)
+	msg, err := startService.CombinedOutput()
 	if err != nil {
 		logger.Error(err)
 	} else {
-		msg, err := c.CombinedOutput()
-		if err != nil {
-			logger.Error(err)
-		} else {
-			logger.Log(log4go.INFO, "w32tm", string(msg))
-		}
+		logger.Log(log4go.INFO, "w32tm", "succeed")
 	}
+	logger.Log(log4go.INFO, "w32tm", string(msg))
 }

@@ -27,7 +27,7 @@ func main() {
 		filePath := strings.ToLower(strings.TrimSpace(*logPath))
 		logger = make(log4go.Logger)
 		logWriter := log4go.NewFileLogWriter(filePath, false)
-		if runtime.GOOS != "windows" {
+		if runtime.GOOS == "windows" {
 			logWriter.SetFormat("[%D %T] [%L] (%S) %M \r\n")
 		}
 		logger.AddFilter("file", log4go.FINE, logWriter)
@@ -61,12 +61,12 @@ func execStartNet() {
 			return
 		}
 		if waitStatus.ExitStatus() == 2 {
-			logger.Log(log4go.WARNING, "w32tm start", "w32time is running")
+			logger.Log(log4go.WARNING, "w32tm start ", "w32time is running")
 			return
 		}
-		logger.Log(log4go.ERROR, "w32tm start", string(msg))
+		logger.Log(log4go.ERROR, "w32tm start ", string(msg))
 	} else {
-		logger.Log(log4go.INFO, "w32tm start", string(msg))
+		logger.Log(log4go.INFO, "w32tm start ", string(msg))
 	}
 }
 

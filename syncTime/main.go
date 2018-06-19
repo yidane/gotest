@@ -41,28 +41,42 @@ func main() {
 		return
 	}
 
-	execCommand("net start w32time")
-	execCommand("w32tm /resync")
+	execStartNet()
+	execResync()
 }
 
-func execCommand(c string) {
-	startService := exec.Command("cmd", "/c", c)
+func execStartNet() {
+	startService := exec.Command("cmd", "/c", "net start w32time")
 	msg, err := startService.CombinedOutput()
 
-	if ee, ok := err.(*exec.ExitError); ok {
-		if waitStatus, ok := ee.ProcessState.Sys().(syscall.WaitStatus); ok {
-			if waitStatus.ExitStatus() == 2 {
-
-			}
+	if err != nil {
+		ee, ok := err.(*exec.ExitError)
+		if !ok {
+			logger.Error(err)
+			return
 		}
+		waitStatus, ok := ee.ProcessState.Sys().(syscall.WaitStatus)
+		if !ok {
+			logger.Error(err)
+			return
+		}
+		if waitStatus.ExitStatus() == 2 {
+			logger.Log(log4go.WARNING, "w32tm start", "w32time is running")
+			return
+		}
+		logger.Log(log4go.ERROR, "w32tm start", string(msg))
 	} else {
-
+		logger.Log(log4go.INFO, "w32tm start", string(msg))
 	}
+}
+
+func execResync() {
+	startService := exec.Command("cmd", "/c", "w32tm /resync")
+	msg, err := startService.CombinedOutput()
 
 	if err != nil {
 		logger.Error(err)
 	} else {
-		logger.Log(log4go.INFO, "w32tm", "succeed")
+		logger.Log(log4go.INFO, "w32tm resync", string(msg))
 	}
-	logger.Log(log4go.INFO, "w32tm", string(msg))
 }

@@ -33,3 +33,18 @@ GOARCH：目标平台的体系架构（386、amd64、arm）
 
 上面的命令编译 64 位可执行程序，你当然应该也会使用 386 编译 32 位可执行程序 
 很多博客都提到要先增加对其它平台的支持，但是我跳过那一步，上面所列的命令也都能成功，且得到我想要的结果，可见那一步应该是非必须的，或是我所使用的 Go 版本已默认支持所有平台。
+
+## 编译
+
+在当前目录执行脚本　
+~~~ code
+bash build.sh
+~~~
+
+## 发布
+拷贝　syncTime.exe、syncTime.vbs、synvTime.bat到windows文件夹下即可。
+
+## 运行方式
+1. 可以以管理员方式执行syncTime.vbs或synvTime.bat。
+2. 在Windows定时任务中配置定时任务，任务内容执行脚本 syncTime.vbs。
+* ps:如果任务没有反应，需要将syncTime.vbs、synvTime.bat中的路径修改为绝对路径。

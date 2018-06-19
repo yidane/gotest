@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/yidane/log4go"
@@ -49,7 +50,11 @@ func execCommand(c string) {
 	msg, err := startService.CombinedOutput()
 
 	if ee, ok := err.(*exec.ExitError); ok {
-		fmt.Println(ee.Success())
+		if waitStatus, ok := ee.ProcessState.Sys().(syscall.WaitStatus); ok {
+			if waitStatus.ExitStatus() == 2 {
+
+			}
+		}
 	} else {
 
 	}

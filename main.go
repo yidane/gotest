@@ -1,11 +1,8 @@
 package main
 
 import (
-	"net/http"
-
 	"fmt"
-
-	"github.com/yidane/gotest/genegrateData"
+	"net/http"
 )
 
 func handle(hw http.ResponseWriter, request *http.Request) {
@@ -21,5 +18,27 @@ func main() {
 	// 	log.Fatal(err)
 	// }
 
-	fmt.Println(genegrateData.CreateNewStudent(1).ToString())
+	//fmt.Println(genegrateData.CreateNewStudent(1).ToString())
+
+	var n = 1200
+
+	var max = 0
+	var t = 0
+	for m := 1; m < 60; m++ {
+		i := n / m
+		r := n - i*m
+		if r > m {
+			continue
+		}
+
+		fmt.Printf("%v %s %v = %v	%v	\n", n, "%", m, i, r)
+
+		if r > max {
+			max = r
+			t = m
+		}
+	}
+
+	fmt.Println(max)
+	fmt.Println(t)
 }

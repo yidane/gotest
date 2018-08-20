@@ -1,3 +1,4 @@
+####2. 以下代码有什么问题，说明原因
 ~~~
 package main
 import (

@@ -17,8 +17,7 @@ func pase_student() map[string]*student {
 		{Name: "wang", Age: 22},
 	}
 	for _, stu := range stus {
-		s:=stu
-		m[stu.Name] = &s
+		m[stu.Name] = &stu
 	}
 	return m
 }

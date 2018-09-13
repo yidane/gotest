@@ -1,0 +1,1 @@
+### Copy image and name it as timestamp

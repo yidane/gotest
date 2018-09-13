@@ -18,33 +18,41 @@
 # 可以放到/etc/bash/bashrc，这样就是系统级的
 
 # 获取网卡wlp2s0所获取的IP地址
-ip=`ifconfig wlp2s0 | grep "inet" | awk '{ print $2}' | awk 'NR==1{print}'`;
+envKey='LOCALIP';
+bashPath='.bashrc'
+netCard='wlp2s0'
+
+ip=`ifconfig $netCard | grep "inet" | awk '{ print $2}' | awk 'NR==1{print}'`;
+
+echo $ip
 
 c=1;
 while [ -z $ip ] && [ $c -le 10 ];
 do
-    echo 'ERROR: IP of wlp2s0 is empty '$c;
+    echo 'ERROR: IP of '$netCard' is empty '$c;
     let c+=1;
     sleep 1;
-    ip=`ifconfig wlp2s0 | grep "inet" | awk '{ print $2}' | awk 'NR==1{print}'`;
+    ip=`ifconfig $netCard | grep "inet" | awk '{ print $2}' | awk 'NR==1{print}'`;
 done
 
 if [ -z $ip ]
 then
-    echo 'ERROR: Get IP of wlp2s0 faild';
+    echo 'ERROR: Get IP of '$netCard' faild';
     ip='NOTHING'
 fi
 
-num=$(grep -nr 'LOCALIP1'  ~/.bashrc | awk -F ':' '{print $1}');
-if [ -z $num ]
+num=$(grep -nr $envKey  $bashPath | awk -F ':' '{print $1}');
+if [ ${#num} -eq 0 ] # 判断长度是否大于0
 then
-    echo 'WARN: no LOCALIP in file ~/.bashrc'
-    sudo sed -i '$a export LOCALIP='$ip ~/.bashrc;
-    echo 'INFO: add LOCALIP to the end line of ~/.bashrc'
+    echo 'WARN: no '$envKey' in file '$bashPath
+    sudo sed -i '$a export '$envKey'='$ip $bashPath;
+    echo 'INFO: add '$envKey' to the end line of '$bashPath
+    env | grep $envKey;
     exit 0;
 fi
 
-sudo sed -i $num'c export LOCALIP='$ip ~/.bashrc;
-echo 'INFO: update value of LOCALIP to '$ip' in file ~/.bashrc'
-source ~/.bashrc;
+sudo sed -i $num'c export '$envKey'='$ip $bashPath;
+echo 'INFO: update value of '$envKey' to '$ip' in file '$bashPath
+source $bashPath;
+env | grep $envKey;
 exit 0;

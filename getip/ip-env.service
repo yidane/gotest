@@ -1,0 +1,14 @@
+[Unit]
+Description=ip-env
+After=network.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=/etc/kubernetes/
+Type=forking
+ExecStart=/bin/bash /etc/kubernetes/getip.sh
+ExecStop=
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

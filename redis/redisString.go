@@ -125,10 +125,3 @@ func (conn *Conn) dels(keys ...string) bool {
 
 	return true
 }
-
-func (conn *Conn) EXISTS(key string) bool {
-	r, err := redis.Bool(conn.Do("EXISTS", key))
-	test.So(err, test.ShouldBeNil)
-
-	return r
-}

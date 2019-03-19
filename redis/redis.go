@@ -1,6 +1,7 @@
 package redis
 
 import (
+	"fmt"
 	"github.com/garyburd/redigo/redis"
 	test "github.com/smartystreets/goconvey/convey"
 )
@@ -37,4 +38,31 @@ func (conn *Conn) SelectDb(db int) {
 func (conn *Conn) Close() {
 	err := conn.Conn.Close()
 	test.So(err, test.ShouldBeNil)
+}
+
+func (conn *Conn) EXISTS(key string) bool {
+	r, err := redis.Bool(conn.Do("EXISTS", key))
+	test.So(err, test.ShouldBeNil)
+
+	return r
+}
+
+func (conn *Conn) Type(key string) string {
+	r, err := redis.String(conn.Do("TYPE", key))
+	test.So(err, test.ShouldBeNil)
+
+	return r
+}
+
+func (conn *Conn) RENAME(key, newKey string) error {
+	_, err := redis.String(conn.Do("RENAME", key, newKey))
+	return err
+}
+
+func (conn *Conn) RENAMENX(key, newKey string) bool {
+	r, err := redis.Bool(conn.Do("RENAMENX", key, newKey))
+	if err != nil {
+		fmt.Println(err)
+	}
+	return r
 }

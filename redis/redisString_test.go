@@ -11,14 +11,14 @@ func TestDel(t *testing.T) {
 		conn := GetRedisConnect()
 		defer conn.Close()
 
-		const count = 100
-		keys := make([]string, 100)
+		const count = 22
+		keys := make([]string, count)
 
 		for i := 0; i < count; i++ {
 			keys[i] = fmt.Sprintf("del:Key%v", i)
 		}
 
-		conn.SelectDb(2)
+		conn.Select(2)
 		test.Convey("Set keys", func() {
 			for i := 0; i < count; i++ {
 				conn.SET(keys[i], keys[i])

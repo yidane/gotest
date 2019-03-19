@@ -75,6 +75,42 @@ func (conn *Conn) SET(key string, values interface{}) {
 	test.So(r, test.ShouldEqual, "OK")
 }
 
+func (conn *Conn) MSET(key string, values map[string]interface{}) {
+	if len(values) == 0 {
+		return
+	}
+
+	args := make([]interface{}, len(values)*2)
+	i := 0
+	for k, v := range values {
+		args[i] = k
+		args[i+1] = v
+		i += 2
+	}
+
+	r, err := redis.String(conn.Do("MSET", args))
+	test.So(err, test.ShouldBeNil)
+	test.So(r, test.ShouldEqual, "OK")
+}
+
+func (conn *Conn) MSETNX(key string, values map[string]interface{}) {
+	if len(values) == 0 {
+		return
+	}
+
+	args := make([]interface{}, len(values)*2)
+	i := 0
+	for k, v := range values {
+		args[i] = k
+		args[i+1] = v
+		i += 2
+	}
+
+	r, err := redis.String(conn.Do("MSETNX", args))
+	test.So(err, test.ShouldBeNil)
+	test.So(r, test.ShouldEqual, "OK")
+}
+
 //SET if Not eXists
 func (conn *Conn) SETNX(key string, values interface{}) bool {
 	r, err := redis.Int(conn.Do("SETNX", key, values))

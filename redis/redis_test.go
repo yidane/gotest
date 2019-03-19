@@ -51,7 +51,7 @@ func TestConn_SelectDb(t *testing.T) {
 		conn := GetRedisConnect()
 		defer conn.Close()
 
-		conn.SelectDb(1)
+		conn.Select(1)
 	})
 }
 
@@ -136,5 +136,117 @@ func TestConn_RENAMENX(t *testing.T) {
 
 		test.So(conn.EXISTS(oldKey), test.ShouldBeFalse)
 		test.So(conn.EXISTS(newKey), test.ShouldBeFalse)
+	})
+}
+
+func TestConn_MOVE(t *testing.T) {
+	test.Convey("TestConn_MOVE", t, func() {
+		conn := GetRedisConnect()
+		defer conn.Close()
+
+		key := strconv.FormatInt(time.Now().UnixNano(), 10)
+
+		conn.Select(0)
+		test.So(conn.EXISTS(key), test.ShouldBeFalse)
+		conn.Select(1)
+		test.So(conn.EXISTS(key), test.ShouldBeFalse)
+
+		//直接移动
+		conn.Select(0)
+		test.So(conn.MOVE(key, 1), test.ShouldBeFalse)
+		test.So(conn.EXISTS(key), test.ShouldBeFalse)
+		conn.Select(1)
+		test.So(conn.EXISTS(key), test.ShouldBeFalse)
+
+		//在0中添加key
+		conn.Select(0)
+		conn.SET(key, key)
+		test.So(conn.EXISTS(key), test.ShouldBeTrue)
+		conn.Select(1)
+		test.So(conn.EXISTS(key), test.ShouldBeFalse)
+
+		//从0移动到1
+		conn.Select(0)
+		test.So(conn.MOVE(key, 1), test.ShouldBeTrue)
+		test.So(conn.EXISTS(key), test.ShouldBeFalse)
+
+		conn.Select(1)
+		test.So(conn.EXISTS(key), test.ShouldBeTrue)
+
+		//再在0中添加相同key，然后移动
+		conn.Select(0)
+		conn.SET(key, key)
+		test.So(conn.EXISTS(key), test.ShouldBeTrue)
+		conn.Select(1)
+		test.So(conn.EXISTS(key), test.ShouldBeTrue)
+
+		//再次从0移动到1
+		conn.Select(0)
+		test.So(conn.MOVE(key, 1), test.ShouldBeFalse)
+		test.So(conn.EXISTS(key), test.ShouldBeTrue)
+
+		conn.Select(1)
+		test.So(conn.EXISTS(key), test.ShouldBeTrue)
+
+		//删除key
+		conn.Select(0)
+		test.So(conn.DEL(key), test.ShouldBeTrue)
+		conn.Select(1)
+		test.So(conn.DEL(key), test.ShouldBeTrue)
+	})
+}
+
+func TestConn_RANDOMKEY(t *testing.T) {
+	test.Convey("TestConn_RANDOMKEY", t, func() {
+		conn := GetRedisConnect()
+		defer conn.Close()
+
+		conn.Select(15)
+		test.So(conn.RANDOMKEY(), test.ShouldBeBlank)
+	})
+}
+
+func TestConn_DBSIZE(t *testing.T) {
+	test.Convey("TestConn_DBSIZE", t, func() {
+		conn := GetRedisConnect()
+		defer conn.Close()
+
+		oldSize := conn.DBSIZE()
+		key := strconv.FormatInt(time.Now().UnixNano(), 10)
+
+		conn.SET(key, key)
+
+		newSize := conn.DBSIZE()
+
+		test.So(newSize, test.ShouldEqual, oldSize+1)
+
+		test.So(conn.DEL(key), test.ShouldBeTrue)
+		newSize = conn.DBSIZE()
+		test.So(newSize, test.ShouldEqual, oldSize)
+	})
+}
+
+func TestConn_Lock(t *testing.T) {
+	test.Convey("", t, func() {
+		conn := GetRedisConnect()
+		defer conn.Close()
+
+		key := strconv.FormatInt(time.Now().UnixNano(), 10)
+
+		f, err := conn.Lock(key, key, 20)
+		test.So(err, test.ShouldBeNil)
+		test.So(f, test.ShouldBeTrue)
+
+		f, err = conn.Lock(key, key, 20)
+		test.So(err, test.ShouldBeNil)
+		test.So(f, test.ShouldBeFalse)
+
+		conn.UnLock(key)
+
+		f, err = conn.Lock(key, key, 20)
+		test.So(err, test.ShouldBeNil)
+		test.So(f, test.ShouldBeTrue)
+
+		conn.UnLock(key)
 	})
 }

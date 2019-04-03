@@ -3,7 +3,6 @@ package channel
 import (
 	"fmt"
 	"testing"
-	"time"
 )
 
 func Test_ChanChan(t *testing.T) {

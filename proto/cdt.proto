@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package main;
+
+message Record {
+    int64 head = 1;
+    bytes data = 2;
+}

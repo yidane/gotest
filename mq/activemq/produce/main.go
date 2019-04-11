@@ -20,25 +20,11 @@ func main() {
 		body := []byte(strconv.Itoa(i))
 		err := commonSend(conn, body)
 		if err != nil {
-			err = commonSend(conn, body)
-			if err != nil {
-				err = commonSend(conn, body)
-				if err != nil {
-					err = commonSend(conn, body)
-					if err != nil {
-						fmt.Println(err)
-						continue
-					}
-				}
-			}
+			fmt.Println(err)
+			continue
 		}
 
 		fmt.Println(i)
-
-		//err = transactionSend(conn, body)
-		//if err != nil {
-		//	log.Fatal(err)
-		//}
 	}
 
 	t := time.Now().Sub(now).Nanoseconds()
@@ -58,4 +44,8 @@ func transactionSend(conn *stomp.Conn, body []byte) error {
 	}
 
 	return tran.Commit()
+}
+
+func produce(conn *stomp.Conn) {
+
 }

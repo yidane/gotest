@@ -3,6 +3,9 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"runtime"
+	"time"
 )
 
 func handle(hw http.ResponseWriter, request *http.Request) {
@@ -39,6 +42,15 @@ func main() {
 		}
 	}
 
+	go func() {
+		fmt.Println("runtime.Goexit()")
+		runtime.Goexit()
+		fmt.Println("runtime.Goexit() end")
+	}()
+
 	fmt.Println(max)
 	fmt.Println(t)
+
+	time.Sleep(time.Millisecond)
+	os.Exit(0)
 }

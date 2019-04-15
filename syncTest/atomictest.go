@@ -1,4 +1,4 @@
-package sync
+package syncTest
 
 import "sync/atomic"
 
